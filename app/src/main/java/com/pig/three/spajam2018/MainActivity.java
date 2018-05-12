@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+    private void testFireBaseDataBase() {
         //fbservice instacne
         FirebaseService fbservice = new FirebaseService();
 
@@ -40,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //write database
-        myRef.setValue("Hello world");
-        myRef.setValue("Hello, World");
+        myRef.setValue("hello world");
+        myRef.setValue("Hello, World!");
     }
 }
