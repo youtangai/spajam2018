@@ -1,7 +1,9 @@
 package com.pig.three.spajam2018;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
     //タイマー
     private Timer CountDownTimer;
-    private Timer Vibration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             if (!(DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0)){
                                 DispCalendar.add(Calendar.SECOND, -1);
+                                //vibration
+                                ((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
                                 myHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
