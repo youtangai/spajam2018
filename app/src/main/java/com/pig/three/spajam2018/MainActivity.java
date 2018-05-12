@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Timer;
@@ -39,6 +40,13 @@ public class MainActivity extends Activity {
     private TextView DispTimerText;
     private TextView DispTimerSecondText;
 
+    //recording button
+    private ImageButton audioButton;
+    private boolean recFlag = false;
+
+    private RecordingService rec = null;
+    private File audioFile = null;
+
     //endのfirebaseリファレンス
     private DatabaseReference myRef;
 
@@ -52,6 +60,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //recording service init
+        rec = new RecordingService();
 
         //create handler
         myHandler = new Handler();
@@ -184,6 +195,8 @@ public class MainActivity extends Activity {
                                 DispCalendar.add(Calendar.SECOND, -1);
                                 //vibration
                                 ((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(900);
+                                //play audio
+                                rec.StartPlay(audioFile.getPath());
                                 myHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -198,6 +211,24 @@ public class MainActivity extends Activity {
                         }
                     };
                     CountDownTimer.scheduleAtFixedRate(countDownTask, 0, 1000); //1000ms = 1sec
+                }
+            }
+        });
+
+        audioButton = findViewById(R.id.audioButton);
+        audioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (recFlag) {
+                    rec.StopRecord();
+                    audioButton.setImageResource(R.drawable.record);
+                    recFlag = false;
+                } else {
+                    audioFile = new File(getFilesDir(), "sample.wav");
+                    Log.d(TAG, "filepath is " + audioFile.getPath());
+                    rec.StartRecord(audioFile);
+                    audioButton.setImageResource(R.drawable.recording);
+                    recFlag = true;
                 }
             }
         });

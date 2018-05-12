@@ -1,24 +1,40 @@
 package com.pig.three.spajam2018;
 
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.os.Environment;
 
 import java.io.File;
+import java.io.IOException;
 
 public class RecordingService {
     private MediaRecorder rec;
-    static final String filepath = Environment.getExternalStorageDirectory() + "/sample.wav";
+    private MediaPlayer mp;
 
-    public void StartRecord() {
-        startRecord();
+    public void StartPlay(String filepath) {
+        startPlay(filepath);
+    }
+
+    public void StartRecord(File file) {
+        startRecord(file);
     }
 
     public void StopRecord() {
         stopRecord();
     }
 
-    private void startRecord() {
-        File wavFile = new File(filepath);
+    private void startPlay(String filepath) {
+        try {
+            mp = new MediaPlayer();
+            mp.setDataSource(filepath);
+            mp.prepare();
+            mp.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startRecord(File file) {
+        File wavFile = file;
         if (wavFile.exists()) {
             wavFile.delete();
         }
@@ -28,7 +44,7 @@ public class RecordingService {
             rec.setAudioSource(MediaRecorder.AudioSource.MIC);
             rec.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             rec.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            rec.setOutputFile(filepath);
+            rec.setOutputFile(file.getPath());
 
             rec.prepare();
             rec.start();
