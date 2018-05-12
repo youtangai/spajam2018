@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -155,7 +154,7 @@ public class MainActivity extends Activity {
         });
 
         //set clicklistener on start button
-        Button startButton = findViewById(R.id.startbutton);
+        ImageButton startButton = findViewById(R.id.startbutton);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
