@@ -22,37 +22,65 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "com.pig.three.spajam2018";
-    private SimpleDateFormat dispdateformat;
-    private final String DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    private SimpleDateFormat dateformat;
-    private Calendar dispcalendar;
-    private TextView timerText;
+
+    //set up formatter
+    private final String DISP_TIMER_PATTERN = "HH:mm";
+    private SimpleDateFormat DispTimerFormatter;
+    private final String DISP_TIMER_SECOND_PATTERN = "ss";
+    private SimpleDateFormat DispTimerSecondFormatter;
+    private final String STANDARD_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private SimpleDateFormat StandardDateFormatter;
+
+    //timer表示用のカレンダー変数
+    private Calendar DispCalendar;
+
+    //タイマーのTextView
+    private TextView DispTimerText;
+    private TextView DispTimerSecondText;
+
+    //endのfirebaseリファレンス
     private DatabaseReference myRef;
-    Handler m_handler = null;
+
+    //ハンドラー
+    private Handler myHandler;
+
+    //タイマー
+    private Timer CountDownTimer;
+    private Timer Vibration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        m_handler = new Handler();
+        //create handler
+        myHandler = new Handler();
 
         //init firebase
         FirebaseService fbservice = new FirebaseService();
         myRef = fbservice.GetReference("end");
 
-        //set timer 00:00
-        dispdateformat = new SimpleDateFormat("HH:mm");
-        timerText = findViewById(R.id.timer);
-        dispcalendar = Calendar.getInstance();
-        dispcalendar.set(Calendar.HOUR_OF_DAY, 0);
-        dispcalendar.set(Calendar.MINUTE, 0);
-        dispcalendar.set(Calendar.SECOND, 0);
-        dispcalendar.set(Calendar.MILLISECOND, 0);
-        timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+        //set timer 00:00:00
+        DispTimerFormatter = new SimpleDateFormat(DISP_TIMER_PATTERN);
+        DispTimerSecondFormatter = new SimpleDateFormat(DISP_TIMER_SECOND_PATTERN);
+        DispTimerText = findViewById(R.id.timer);
+        DispTimerSecondText = findViewById(R.id.timerSecond);
+
+        //表示するカレンダーの初期化
+        DispCalendar = Calendar.getInstance();
+        DispCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        DispCalendar.set(Calendar.MINUTE, 0);
+        DispCalendar.set(Calendar.SECOND, 0);
+        DispCalendar.set(Calendar.MILLISECOND, 0);
+
+        //hhとmmの初期化
+        DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
+
+        //ssの初期化
+        DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
 
         //set standard dateformat
-        dateformat = new SimpleDateFormat(DATE_PATTERN);
+        StandardDateFormatter = new SimpleDateFormat(STANDARD_DATE_PATTERN);
 
         //set changelistener on firebase end reference
         myRef.addValueEventListener(new ValueEventListener() {
@@ -67,11 +95,15 @@ public class MainActivity extends AppCompatActivity {
 
                 int hour = nowCal.get(Calendar.HOUR_OF_DAY);
                 int minute = nowCal.get(Calendar.MINUTE);
+                int sec = nowCal.get(Calendar.SECOND);
 
                 //差分を計算
                 endCal.add(Calendar.HOUR_OF_DAY, -hour);
                 endCal.add(Calendar.MINUTE, -minute);
-                timerText.setText(dispdateformat.format(endCal.getTime()));
+                endCal.add(Calendar.SECOND, -sec);
+                DispCalendar = endCal;
+                DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
+                DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
             }
 
             @Override
@@ -90,32 +122,32 @@ public class MainActivity extends AppCompatActivity {
         hourUp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                dispcalendar.add(Calendar.HOUR_OF_DAY, 1);
-                timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                DispCalendar.add(Calendar.HOUR_OF_DAY, 1);
+                DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
             }
         });
 
         hourDown.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                dispcalendar.add(Calendar.HOUR_OF_DAY, -1);
-                timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                DispCalendar.add(Calendar.HOUR_OF_DAY, -1);
+                DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
             }
         });
 
         minutesUp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                dispcalendar.add(Calendar.MINUTE, 1);
-                timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                DispCalendar.add(Calendar.MINUTE, 1);
+                DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
             }
         });
 
         minutesDown.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                dispcalendar.add(Calendar.MINUTE, -1);
-                timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                DispCalendar.add(Calendar.MINUTE, -1);
+                DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
             }
         });
 
@@ -124,8 +156,10 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hour = dispcalendar.get(Calendar.HOUR_OF_DAY);
-                int minute = dispcalendar.get(Calendar.MINUTE);
+                int hour = DispCalendar.get(Calendar.HOUR_OF_DAY);
+                int minute = DispCalendar.get(Calendar.MINUTE);
+                int sec = DispCalendar.get(Calendar.SECOND);
+
                 if (hour == 0 && minute == 0) {
                     Toast toast = Toast.makeText(MainActivity.this, "時間と分を設定してください", Toast.LENGTH_SHORT);
                     toast.show();
@@ -134,29 +168,32 @@ public class MainActivity extends AppCompatActivity {
                     Calendar nowCal = Calendar.getInstance();
                     nowCal.add(Calendar.HOUR_OF_DAY, hour);
                     nowCal.add(Calendar.MINUTE, minute);
-                    String end = dateformat.format(nowCal.getTime());
+                    nowCal.add(Calendar.SECOND, sec);
+                    String end = StandardDateFormatter.format(nowCal.getTime());
 
                     // push firebase end string
                     myRef.setValue(end);
 
-                    Timer timer = new Timer();
-                    TimerTask task = new TimerTask() {
+                    CountDownTimer = new Timer();
+                    TimerTask countDownTask = new TimerTask() {
                         @Override
                         public void run() {
-                            if (!(dispcalendar.get(Calendar.HOUR_OF_DAY) == 0 && dispcalendar.get(Calendar.MINUTE) == 0)){
-                                dispcalendar.add(Calendar.MINUTE, -1);
-                                m_handler.post(new Runnable() {
+                            if (!(DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0)){
+                                DispCalendar.add(Calendar.SECOND, -1);
+                                myHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                                        DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
+                                        DispTimerText.setText(DispTimerFormatter.format(DispCalendar.getTime()));
                                     }
                                 });
+                            } else {
+                                CountDownTimer.cancel();
                             }
 
                         }
                     };
-
-                    timer.scheduleAtFixedRate(task, 0, 1000*60); //1000ms = 1sec
+                    CountDownTimer.scheduleAtFixedRate(countDownTask, 0, 1000); //1000ms = 1sec
                 }
             }
         });
@@ -166,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         java.util.Date date = null;
 
         try {
-            date = new java.util.Date( dateformat.parse(stringdate).getTime());
+            date = new java.util.Date( StandardDateFormatter.parse(stringdate).getTime());
         } catch (java.text.ParseException e) {
             Log.d("時間のパースエラー", e.toString());
         }
