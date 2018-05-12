@@ -31,29 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set standard dateformat
-        dateformat = new SimpleDateFormat(DATE_PATTERN);
-
         //init firebase
         FirebaseService fbservice = new FirebaseService();
         myRef = fbservice.GetReference("end");
-
-        //set changelistener on firebase end reference
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
 
         //set timer 00:00
         dispdateformat = new SimpleDateFormat("HH:mm");
@@ -64,6 +44,36 @@ public class MainActivity extends AppCompatActivity {
         dispcalendar.set(Calendar.SECOND, 0);
         dispcalendar.set(Calendar.MILLISECOND, 0);
         timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+
+        //set standard dateformat
+        dateformat = new SimpleDateFormat(DATE_PATTERN);
+
+        //set changelistener on firebase end reference
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value);
+
+                //終了時刻と現在時刻を取得
+                Calendar endCal = datestringToCalendar(value);
+                Calendar nowCal = Calendar.getInstance();
+
+                int hour = nowCal.get(Calendar.HOUR_OF_DAY);
+                int minute = nowCal.get(Calendar.MINUTE);
+
+                //差分を計算
+                endCal.add(Calendar.HOUR_OF_DAY, -hour);
+                endCal.add(Calendar.MINUTE, -minute);
+                timerText.setText(dispdateformat.format(endCal.getTime()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
         //set clicklistenr on up and down
         ImageButton hourUp = findViewById(R.id.hourUp);
@@ -139,34 +149,5 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal;
-    }
-
-
-    private void testFireBaseDataBase() {
-        //fbservice instacne
-        FirebaseService fbservice = new FirebaseService();
-
-        //get reference firebase object
-        DatabaseReference myRef = fbservice.GetReference("message");
-
-        //set change listener on reference
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-
-        myRef.setValue("hello world");
-        myRef.setValue("Hello, World!");
     }
 }
