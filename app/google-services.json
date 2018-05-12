@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "388915580247",
+    "firebase_url": "https://spajam2018-dbd7e.firebaseio.com",
+    "project_id": "spajam2018-dbd7e",
+    "storage_bucket": "spajam2018-dbd7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388915580247:android:2ab05e5db0998cab",
+        "android_client_info": {
+          "package_name": "com.pig.three.spajam2018"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388915580247-p9bll2h5f3nu6g04pt36getgac65r62m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArq-J9TYdez-8EazwyjZdTof2RsZbZKo0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
