@@ -3,20 +3,28 @@ package com.pig.three.spajam2018;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "com.pig.three.spajam2018";
+    private SimpleDateFormat dataFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dataFormat = new SimpleDateFormat("hh:mm");
+
+        TextView timerText = findViewById(R.id.timer);
+        timerText.setText(dataFormat.format(0));
     }
 
     private void testFireBaseDataBase() {

@@ -11,75 +11,97 @@
         android:id="@+id/timerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="115dp"
+        android:layout_marginStart="115dp"
         android:text="タイマー設定"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.147"
-        tools:layout_editor_absoluteX="115dp"
-        tools:textSize="30sp"/>
+        app:layout_constraintVertical_bias="0.147"/>
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+        android:layout_marginEnd="161dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="8dp"
         android:text="00:00"
-        app:layout_constraintTop_toBottomOf="@+id/timerTitle"
-        tools:layout_editor_absoluteX="160dp"
-        tools:textSize="36sp"/>
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.455"/>
 
     <ImageButton
         android:id="@+id/audiobutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
+        android:layout_marginEnd="178dp"
+        android:layout_marginStart="177dp"
         app:layout_constraintBottom_toTopOf="@+id/startbutton"
-        app:srcCompat="@android:drawable/ic_btn_speak_now"
-        tools:layout_editor_absoluteX="177dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_btn_speak_now"/>
 
     <Button
         android:id="@+id/startbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="68dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginStart="161dp"
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="161dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageButton
         android:id="@+id/hourUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView10"
-        app:srcCompat="@android:drawable/arrow_up_float"
-        tools:layout_editor_absoluteX="160dp"/>
+        android:layout_marginTop="204dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.392"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_up_float"/>
 
     <ImageButton
         android:id="@+id/minutesUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView10"
-        app:srcCompat="@android:drawable/arrow_up_float"
-        tools:layout_editor_absoluteX="211dp"/>
+        android:layout_marginTop="204dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.602"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_up_float"/>
 
     <ImageButton
         android:id="@+id/hourDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:srcCompat="@android:drawable/arrow_down_float"
-        tools:layout_editor_absoluteX="160dp"/>
+        android:layout_marginBottom="232dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.392"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float"/>
 
     <ImageButton
         android:id="@+id/minutesDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:srcCompat="@android:drawable/arrow_down_float"
-        tools:layout_editor_absoluteX="211dp"/>
+        android:layout_marginBottom="232dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.602"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float"/>
 
 </android.support.constraint.ConstraintLayout>
