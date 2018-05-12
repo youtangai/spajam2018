@@ -1,6 +1,7 @@
 package com.pig.three.spajam2018;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "com.pig.three.spajam2018";
@@ -25,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private Calendar dispcalendar;
     private TextView timerText;
     private DatabaseReference myRef;
+    Handler m_handler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        m_handler = new Handler();
 
         //init firebase
         FirebaseService fbservice = new FirebaseService();
@@ -132,6 +138,25 @@ public class MainActivity extends AppCompatActivity {
 
                     // push firebase end string
                     myRef.setValue(end);
+
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (!(dispcalendar.get(Calendar.HOUR_OF_DAY) == 0 && dispcalendar.get(Calendar.MINUTE) == 0)){
+                                dispcalendar.add(Calendar.MINUTE, -1);
+                                m_handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        timerText.setText(dispdateformat.format(dispcalendar.getTime()));
+                                    }
+                                });
+                            }
+
+                        }
+                    };
+
+                    timer.scheduleAtFixedRate(task, 0, 1000*60); //1000ms = 1sec
                 }
             }
         });
