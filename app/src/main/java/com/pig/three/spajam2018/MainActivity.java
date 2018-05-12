@@ -82,8 +82,6 @@ public class MainActivity extends Activity {
 
         //表示するカレンダーの初期化
         DispCalendar = Calendar.getInstance();
-        String end = StandardDateFormatter.format(DispCalendar.getTime());
-        myRef.setValue(end);
         DispCalendar.set(Calendar.HOUR_OF_DAY, 0);
         DispCalendar.set(Calendar.MINUTE, 0);
         DispCalendar.set(Calendar.SECOND, 0);
@@ -94,6 +92,9 @@ public class MainActivity extends Activity {
 
         //ssの初期化
         DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
+
+        String end = StandardDateFormatter.format(Calendar.getInstance().getTime());
+        myRef.setValue(end);
 
         //set changelistener on firebase end reference
         myRef.addValueEventListener(new ValueEventListener() {
