@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "com.pig.three.spajam2018";
@@ -21,10 +22,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataFormat = new SimpleDateFormat("hh:mm");
+        dataFormat = new SimpleDateFormat("HH:mm");
 
         TextView timerText = findViewById(R.id.timer);
-        timerText.setText(dataFormat.format(0));
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        timerText.setText(dataFormat.format(calendar.getTime()));
     }
 
     private void testFireBaseDataBase() {
