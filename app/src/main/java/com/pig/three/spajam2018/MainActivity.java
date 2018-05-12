@@ -64,11 +64,16 @@ public class MainActivity extends AppCompatActivity {
         //set timer 00:00:00
         DispTimerFormatter = new SimpleDateFormat(DISP_TIMER_PATTERN);
         DispTimerSecondFormatter = new SimpleDateFormat(DISP_TIMER_SECOND_PATTERN);
+        //set standard dateformat
+        StandardDateFormatter = new SimpleDateFormat(STANDARD_DATE_PATTERN);
+
         DispTimerText = findViewById(R.id.timer);
         DispTimerSecondText = findViewById(R.id.timerSecond);
 
         //表示するカレンダーの初期化
         DispCalendar = Calendar.getInstance();
+        String end = StandardDateFormatter.format(DispCalendar.getTime());
+        myRef.setValue(end);
         DispCalendar.set(Calendar.HOUR_OF_DAY, 0);
         DispCalendar.set(Calendar.MINUTE, 0);
         DispCalendar.set(Calendar.SECOND, 0);
@@ -79,9 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         //ssの初期化
         DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
-
-        //set standard dateformat
-        StandardDateFormatter = new SimpleDateFormat(STANDARD_DATE_PATTERN);
 
         //set changelistener on firebase end reference
         myRef.addValueEventListener(new ValueEventListener() {
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                             if (!(DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0)){
                                 DispCalendar.add(Calendar.SECOND, -1);
                                 //vibration
-                                ((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
+                                ((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(900);
                                 myHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
