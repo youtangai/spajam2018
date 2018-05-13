@@ -55,6 +55,10 @@ public class MainActivity extends Activity {
 
     //タイマー
     private Timer CountDownTimer;
+    private Timer AudioTimer;
+
+    private int audioSpan = 2;
+    private int firebaseResetSpan = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,9 @@ public class MainActivity extends Activity {
         //ssの初期化
         DispTimerSecondText.setText(DispTimerSecondFormatter.format(DispCalendar.getTime()));
 
-        String end = StandardDateFormatter.format(Calendar.getInstance().getTime());
+        Calendar tmp = Calendar.getInstance();
+        tmp.add(Calendar.MILLISECOND, firebaseResetSpan);
+        String end = StandardDateFormatter.format(tmp.getTime());
         myRef.setValue(end);
 
         //set changelistener on firebase end reference
@@ -196,8 +202,6 @@ public class MainActivity extends Activity {
                                 DispCalendar.add(Calendar.SECOND, -1);
                                 //vibration
                                 ((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(900);
-                                //play audio
-                                rec.StartPlay(audioFile.getPath());
                                 myHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -212,6 +216,19 @@ public class MainActivity extends Activity {
                         }
                     };
                     CountDownTimer.scheduleAtFixedRate(countDownTask, 0, 1000); //1000ms = 1sec
+
+                    AudioTimer = new Timer();
+                    TimerTask audioTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (!(DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0)){
+                                rec.StartPlay(audioFile.getPath());
+                            } else {
+                                AudioTimer.cancel();
+                            }
+                        }
+                    };
+                    AudioTimer.scheduleAtFixedRate(audioTask, 0, 1000*audioSpan);
                 }
             }
         });
