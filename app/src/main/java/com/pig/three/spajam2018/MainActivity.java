@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
     private Timer AudioTimer;
 
     private int audioSpan = 2;
-    private int firebaseResetSpan = 100;
+    private int firebaseResetSpan = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
