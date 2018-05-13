@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -263,12 +264,22 @@ public class MainActivity extends Activity {
                 if (recFlag) {
                     rec.StopRecord();
                     audioButton.setImageResource(R.drawable.record);
+                    ViewGroup.LayoutParams lp = audioButton.getLayoutParams();
+                    lp.height = 145;
+                    ViewGroup.MarginLayoutParams mp =(ViewGroup.MarginLayoutParams)lp;
+                    mp.bottomMargin = 25;
+                    audioButton.setLayoutParams(mp);
                     recFlag = false;
                 } else {
                     audioFile = new File(getFilesDir(), "sample.wav");
                     Log.d(TAG, "filepath is " + audioFile.getPath());
                     rec.StartRecord(audioFile);
                     audioButton.setImageResource(R.drawable.recording);
+                    ViewGroup.LayoutParams lp = audioButton.getLayoutParams();
+                    lp.height = 190;
+                    ViewGroup.MarginLayoutParams mp =(ViewGroup.MarginLayoutParams)lp;
+                    mp.bottomMargin = 8;
+                    audioButton.setLayoutParams(mp);
                     recFlag = true;
                 }
             }
