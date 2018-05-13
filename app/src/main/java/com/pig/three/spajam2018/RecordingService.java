@@ -70,4 +70,12 @@ public class RecordingService {
     private void startBell(MediaPlayer bell) {
         bell.start();
     }
+
+    public void StartDonpafu(MediaPlayer donpafu) {
+        startDonpafu(donpafu);
+    }
+
+    private void startDonpafu(MediaPlayer donpafu) {
+        donpafu.start();
+    }
 }

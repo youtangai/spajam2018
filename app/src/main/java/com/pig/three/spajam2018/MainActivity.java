@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
     private File audioFile = null;
 
     private MediaPlayer bell = null;
+    private MediaPlayer donpafu = null;
 
     //endのfirebaseリファレンス
     private DatabaseReference myRef;
@@ -59,6 +60,7 @@ public class MainActivity extends Activity {
     //タイマー
     private Timer CountDownTimer;
     private Timer AudioTimer;
+    private Timer DonpafuTimer;
 
     private int audioSpan = 2;
     private int firebaseResetSpan = 50;
@@ -174,6 +176,8 @@ public class MainActivity extends Activity {
             }
         });
 
+        donpafu = MediaPlayer.create(this, R.raw.donpafu);
+
         //set clicklistener on start button
         ImageButton startButton = findViewById(R.id.startbutton);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +219,6 @@ public class MainActivity extends Activity {
                             } else {
                                 CountDownTimer.cancel();
                             }
-
                         }
                     };
                     CountDownTimer.scheduleAtFixedRate(countDownTask, 0, 1000); //1000ms = 1sec
@@ -236,6 +239,19 @@ public class MainActivity extends Activity {
                         }
                     };
                     AudioTimer.scheduleAtFixedRate(audioTask, 0, 1000*audioSpan);
+
+                    donpafu = MediaPlayer.create(getApplicationContext(), R.raw.donpafu);
+                    DonpafuTimer = new Timer();
+                    TimerTask donpafuTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0) {
+                                rec.StartDonpafu(donpafu);
+                                DonpafuTimer.cancel();
+                            }
+                        }
+                    };
+                    DonpafuTimer.scheduleAtFixedRate(donpafuTask, 0, 600);
                 }
             }
         });
