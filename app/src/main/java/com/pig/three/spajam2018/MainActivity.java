@@ -2,6 +2,7 @@ package com.pig.three.spajam2018;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -46,6 +47,8 @@ public class MainActivity extends Activity {
 
     private RecordingService rec = null;
     private File audioFile = null;
+
+    private MediaPlayer bell = null;
 
     //endのfirebaseリファレンス
     private DatabaseReference myRef;
@@ -217,12 +220,16 @@ public class MainActivity extends Activity {
                     };
                     CountDownTimer.scheduleAtFixedRate(countDownTask, 0, 1000); //1000ms = 1sec
 
+
                     AudioTimer = new Timer();
+                    bell = MediaPlayer.create(getApplicationContext(), R.raw.bell);
+
                     TimerTask audioTask = new TimerTask() {
                         @Override
                         public void run() {
                             if (!(DispCalendar.get(Calendar.HOUR_OF_DAY) == 0 && DispCalendar.get(Calendar.MINUTE) == 0 && DispCalendar.get(Calendar.SECOND) == 0)){
                                 rec.StartPlay(audioFile.getPath());
+                                rec.StartBell(bell);
                             } else {
                                 AudioTimer.cancel();
                             }

@@ -62,4 +62,12 @@ public class RecordingService {
             e.printStackTrace();
         }
     }
+
+    public void StartBell(MediaPlayer bell) {
+        startBell(bell);
+    }
+
+    private void startBell(MediaPlayer bell) {
+        bell.start();
+    }
 }
